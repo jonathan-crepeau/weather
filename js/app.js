@@ -1300,3 +1300,28 @@ const evanstonWeather = {
     country: "US",
   },
 };
+
+
+// 1. Access the city information using some kind of object notation.
+
+  // 1a. print the name of the city in the console.
+
+  // console.log(evanstonWeather.city.name);
+
+  // 1b. by pulling the city name and the latitude and longitude out of the object and interpolating them, print a sentence in the console that reads: "The coordinates of Evanston are 42.0447 latitude and -87.6931 longitude."
+
+  // console.log(
+  //   'The coordinates of ' + evanstonWeather.city.name + ' are ' + evanstonWeather.city.coord.lat + ' latitute and ' + evanstonWeather.city.coord.lon + ' longitude.'
+  // );
+
+  // 1c. put all of the above logic in a function called getCity that takes the entire object as a parameter and uses that parameter to get the data, and additionally uses it to return the city name (and call the function within your code).
+
+// NOTE - Remember, the 'function' keyword used in the declaration below *hoists* the function so I can call on it in my code file ahead of where I have it declared:
+
+// getCity(evanstonWeather);
+
+// function getCity(obj) {
+//   console.log(
+//     'The coordinates of ' + obj.city.name + ' are ' + obj.city.coord.lat + ' latitude and ' + obj.city.coord.lon + ' longitude.'
+//   );
+// }
