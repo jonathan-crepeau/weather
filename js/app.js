@@ -1325,3 +1325,59 @@ const evanstonWeather = {
 //     'The coordinates of ' + obj.city.name + ' are ' + obj.city.coord.lat + ' latitude and ' + obj.city.coord.lon + ' longitude.'
 //   );
 // }
+
+
+// 2. Write logic to console.log the weather description for 3-20 at 6pm. Make the output a nice English sentence.
+
+const timeStamp = 1521644400;
+
+// SECTION VERSION #1:
+
+function convertUnix(input) {
+  const milliseconds = input * 1000;
+  // console.log(milliseconds);
+  const dateObject = new Date(milliseconds);
+  return dateObject;
+  // console.log(dateObject);
+  // const humanDateFormat = dateObject.toLocaleString();
+  // console.log(humanDateFormat);
+  // console.log(dateObject.toLocaleString("en-US", {timeZoneName: "long"}));
+}
+
+// convertUnix(timeStamp);
+
+// TODO - Loop through all weather readings in list array:
+
+function weatherReadingsLoop(obj) {
+  for (let a = 0; a < obj.list.length; a++) {
+    // console.log(obj.list[a].dt);
+    // convertUnix(obj.list[a].dt);
+    if (convertUnix(obj.list[a].dt) == "Tue Mar 20 2018 17:00:00 GMT-0700 (Pacific Daylight Time)") {
+      console.log("found it! " + convertUnix(obj.list[a].dt));
+    }
+  }
+}
+
+// weatherReadingsLoop(evanstonWeather);
+
+
+
+// SECTION - Version #2
+function convertTimeStamp(obj) {
+  const dateObject = new Date(obj * 1000);
+  return dateObject.toLocaleString("en-US", {timeZone: "America/Chicago", timeZoneName: "long"});
+}
+
+// convertTimeStamp(timeStamp);
+
+function printWeatherTimes(obj) {
+  for (let a = 0; a < obj.list.length; a++) {
+    console.log(convertTimeStamp(obj.list[a].dt));
+  }
+}
+
+// TO DO
+  // 1. Assume that the SEI-7 date & time request are off by an hour with Central Time Zone // maybe one last ditch effort to see if toLocaleString({ timezome: ...}) should automatically account for it.
+  // 2. Can I clone the SEI-7 repo to my GA github account (change settings to public view?), then use my personal github to clone again? Do I want to fuck with that and risk them changing access status? 
+
+printWeatherTimes(evanstonWeather);
