@@ -1395,3 +1395,31 @@ const evanstonWeather = {
 
 // Successful test with call of function below:
 // printWeatherDescription(evanstonWeather, "3/20/2018, 7:00:00 PM CDT");
+
+
+// SECTION - 3. Write logic to print out the forecasted temperature for 3-20 at 9am. Make the output a nice English sentence, and code any conversion necessary (Temp is given in Kelvin).
+
+function displayForecastTemp(obj, forecastTime) {
+  for (let a = 0; a < obj.list.length; a++) {
+    let logEntryTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', timeZoneName: 'short'});
+    if (forecastTime == logEntryTime) {
+      let logObject = obj.list[a];
+      console.log(
+        'The forecasted temperature for ' + 
+        logEntryTime + ' is ' +
+        (((averageOfSum([logObject.main.temp_min, logObject.main.temp_max])) - 273) * 1.8 + 32) + 
+        ' degrees Farenheit.'
+      );
+    }
+  }
+}
+
+function averageOfSum(arr) {
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
+displayForecastTemp(evanstonWeather, '3/20/2018, 7:00:00 PM CDT');
+displayForecastTemp(evanstonWeather, '3/20/2018, 10:00:00 PM CDT');
+
+
+
