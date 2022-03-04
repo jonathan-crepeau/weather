@@ -1429,39 +1429,73 @@ const evanstonWeather = {
 // NOTE
 // 3/17/2018 4:00:00 PM CDT - St. Paddy's Day
 
-function windReadings(obj, chosenTime) {
-  for (let c = 0; c < obj.list.length; c++) {
-    let logObject = obj.list[c];
-    let logTime = new Date(obj.list[c].dt * 1000).toLocaleString("en-US", {
-      timeZone: "America/Chicago",
-      timeZoneName: "short",
-    });
-    if (chosenTime == logTime) {
-      console.log('The wind will be blowing ' + (degreeToDirectional(logObject.wind.deg)) +  ' at ' + (logObject.wind.speed * 2.236936) + ' mph!')
+// function windReadings(obj, chosenTime) {
+//   for (let c = 0; c < obj.list.length; c++) {
+//     let logObject = obj.list[c];
+//     let logTime = new Date(obj.list[c].dt * 1000).toLocaleString("en-US", {
+//       timeZone: "America/Chicago",
+//       timeZoneName: "short",
+//     });
+//     if (chosenTime == logTime) {
+//       console.log('The wind will be blowing ' + (degreeToDirectional(logObject.wind.deg)) +  ' at ' + (logObject.wind.speed * 2.236936) + ' mph!')
+//     }
+//   }
+// }
+
+// function degreeToDirectional(num) {
+//   if (num > 0 && num < 31 || num > 330 && num < 361) {
+//     return 'North';
+//   } else if (num > 30 && num < 61) {
+//     return 'North-East'
+//   } else if (num > 60 && num < 121) {
+//     return 'East'
+//   } else if (num > 120 && num < 151) {
+//     return 'South-East'
+//   } else if (num > 150 && num < 211) {
+//     return 'South'
+//   } else if (num > 210 && num < 241) {
+//     return 'South-West'
+//   } else if (num > 240 && num < 301) {
+//     return 'West'
+//   } else if (num > 300 && num < 331) {
+//     return 'North-West'
+//   }
+// }
+
+// windReadings(evanstonWeather, '3/17/2018, 4:00:00 PM CDT');
+
+
+// SECTION - 5. Write logic to print the humidity each day at noon. If it's over 75%, also print the word "gross" in parentheses like this:
+
+// 2014-06-19: 60%
+// 2014-06-20: 77% (gross)
+
+function checkHumidty(obj) {
+  for (let a = 0; a < obj.list.length; a++) {
+    // console.log(obj.list[a].main.humidity);
+    let logTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago', timeZoneName: 'short'});
+    // console.log(logTime);
+    if (logTime.match('1:00:00 PM')) {
+      if (obj.list[a].main.humidity > 75) {
+        console.log(`${obj.list[a].main.humidity} (gross)`);
+      } else {
+        console.log(`${obj.list[a].main.humidity}`);
+      }
     }
   }
 }
 
-function degreeToDirectional(num) {
-  if (num > 0 && num < 31 || num > 330 && num < 361) {
-    return 'North';
-  } else if (num > 30 && num < 61) {
-    return 'North-East'
-  } else if (num > 60 && num < 121) {
-    return 'East'
-  } else if (num > 120 && num < 151) {
-    return 'South-East'
-  } else if (num > 150 && num < 211) {
-    return 'South'
-  } else if (num > 210 && num < 241) {
-    return 'South-West'
-  } else if (num > 240 && num < 301) {
-    return 'West'
-  } else if (num > 300 && num < 331) {
-    return 'North-West'
-  }
-}
+// checkHumidty(evanstonWeather);
 
-windReadings(evanstonWeather, '3/17/2018, 4:00:00 PM CDT');
+// const regex = /........./;
 
+// let timeStamp = new Date(evanstonWeather.list[0].dt * 1000).toLocaleString();
+// let timeArray = timeStamp.split('');
+// let newArray = [];
+// console.log(timeArray);
 
+// for (let j = 0; j < 7; j++) {
+//   newArray.push(timeArray[j])
+// }
+
+// console.log(newArray.join(''));
