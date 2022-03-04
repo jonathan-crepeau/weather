@@ -1399,27 +1399,69 @@ const evanstonWeather = {
 
 // SECTION - 3. Write logic to print out the forecasted temperature for 3-20 at 9am. Make the output a nice English sentence, and code any conversion necessary (Temp is given in Kelvin).
 
-function displayForecastTemp(obj, forecastTime) {
-  for (let a = 0; a < obj.list.length; a++) {
-    let logEntryTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', timeZoneName: 'short'});
-    if (forecastTime == logEntryTime) {
-      let logObject = obj.list[a];
-      console.log(
-        'The forecasted temperature for ' + 
-        logEntryTime + ' is ' +
-        (((averageOfSum([logObject.main.temp_min, logObject.main.temp_max])) - 273) * 1.8 + 32) + 
-        ' degrees Farenheit.'
-      );
+// function displayForecastTemp(obj, forecastTime) {
+//   for (let a = 0; a < obj.list.length; a++) {
+//     let logEntryTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', timeZoneName: 'short'});
+//     if (forecastTime == logEntryTime) {
+//       let logObject = obj.list[a];
+//       console.log(
+//         'The forecasted temperature for ' + 
+//         logEntryTime + ' is ' +
+//         (((averageOfSum([logObject.main.temp_min, logObject.main.temp_max])) - 273) * 1.8 + 32) + 
+//         ' degrees Farenheit.'
+//       );
+//     }
+//   }
+// }
+
+// function averageOfSum(arr) {
+//   return arr.reduce((a, b) => a + b, 0) / arr.length;
+// }
+
+// displayForecastTemp(evanstonWeather, '3/20/2018, 7:00:00 PM CDT');
+// displayForecastTemp(evanstonWeather, '3/20/2018, 10:00:00 PM CDT');
+
+
+// SECTION - 4a. Write logic to find wind speed and direction on St. Patrick's day at 3pm. Do some googling to figure out how to convert meters/second to mph, and how to convert the meteorological description of wind direction into human-understandable format. Write logic to do the conversions (don't just plug 3m/s in mph into Google or some other online converter). 
+
+// 4b. When you get it all figured out, you will use all of it to console.log a sentence that reads "The wind will be blowing (some cardinal direction that you will figure out--N, NE, E, SE, S, SW, W, NW are the choices) at (whatever mph you calculated from the given m/s). There is a pretty substantial amount of research and calculation required to do this, plus thinking outside the box.
+
+// NOTE
+// 3/17/2018 4:00:00 PM CDT - St. Paddy's Day
+
+function windReadings(obj, chosenTime) {
+  for (let c = 0; c < obj.list.length; c++) {
+    let logObject = obj.list[c];
+    let logTime = new Date(obj.list[c].dt * 1000).toLocaleString("en-US", {
+      timeZone: "America/Chicago",
+      timeZoneName: "short",
+    });
+    if (chosenTime == logTime) {
+      console.log('The wind will be blowing ' + (degreeToDirectional(logObject.wind.deg)) +  ' at ' + (logObject.wind.speed * 2.236936) + ' mph!')
     }
   }
 }
 
-function averageOfSum(arr) {
-  return arr.reduce((a, b) => a + b, 0) / arr.length;
+function degreeToDirectional(num) {
+  if (num > 0 && num < 31 || num > 330 && num < 361) {
+    return 'North';
+  } else if (num > 30 && num < 61) {
+    return 'North-East'
+  } else if (num > 60 && num < 121) {
+    return 'East'
+  } else if (num > 120 && num < 151) {
+    return 'South-East'
+  } else if (num > 150 && num < 211) {
+    return 'South'
+  } else if (num > 210 && num < 241) {
+    return 'South-West'
+  } else if (num > 240 && num < 301) {
+    return 'West'
+  } else if (num > 300 && num < 331) {
+    return 'North-West'
+  }
 }
 
-displayForecastTemp(evanstonWeather, '3/20/2018, 7:00:00 PM CDT');
-displayForecastTemp(evanstonWeather, '3/20/2018, 10:00:00 PM CDT');
-
+windReadings(evanstonWeather, '3/17/2018, 4:00:00 PM CDT');
 
 
