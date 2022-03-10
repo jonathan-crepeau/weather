@@ -1470,32 +1470,65 @@ const evanstonWeather = {
 // 2014-06-19: 60%
 // 2014-06-20: 77% (gross)
 
-function checkHumidty(obj) {
+// NOTE - Version 1, no date stamp:
+
+// function checkHumidty(obj) {
+//   for (let a = 0; a < obj.list.length; a++) {
+//     // console.log(obj.list[a].main.humidity);
+//     let logTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago', timeZoneName: 'short'});
+//     // console.log(logTime);
+//     if (logTime.match('1:00:00 PM')) {
+//       if (obj.list[a].main.humidity > 75) {
+//         console.log(`${obj.list[a].main.humidity} (gross)`);
+//       } else {
+//         console.log(`${obj.list[a].main.humidity}`);
+//       }
+//     }
+//   }
+// }
+
+// NOTE - Version 2 with YYYY-MM-DD format:
+
+function checkHumidityWDateStamp(obj) {
   for (let a = 0; a < obj.list.length; a++) {
-    // console.log(obj.list[a].main.humidity);
-    let logTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', { timeZone: 'America/Chicago', timeZoneName: 'short'});
-    // console.log(logTime);
-    if (logTime.match('1:00:00 PM')) {
+    let entryLogTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'short', timeZone: 'America/Chicago', timeStyle: 'short'})
+    if (entryLogTime.match('1:00 PM')) {
       if (obj.list[a].main.humidity > 75) {
-        console.log(`${obj.list[a].main.humidity} (gross)`);
+        console.log(
+          formatDate(new Date(obj.list[a].dt * 1000)) + ' ' +
+          obj.list[a].main.humidity + '% ' +
+          '(gross)'
+        );
       } else {
-        console.log(`${obj.list[a].main.humidity}`);
+        console.log(
+          formatDate(new Date(obj.list[a].dt * 1000)) +
+            ' ' +
+            obj.list[a].main.humidity + '%'
+        );
       }
     }
   }
 }
 
-// checkHumidty(evanstonWeather);
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
 
-// const regex = /........./;
+function formatDate(date) {
+  return [
+    date.getFullYear(),
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+  ].join('-');
+}
 
-// let timeStamp = new Date(evanstonWeather.list[0].dt * 1000).toLocaleString();
-// let timeArray = timeStamp.split('');
-// let newArray = [];
-// console.log(timeArray);
+// checkHumidityWDateStamp(evanstonWeather);
 
-// for (let j = 0; j < 7; j++) {
-//   newArray.push(timeArray[j])
-// }
+// const newDT = 1521633600;
+// NOTE - formatDate function does not work correction if new Date has .toLocaleSTring method applied.
+// console.log(formatDate(new Date((newDT * 1000))))
 
-// console.log(newArray.join(''));
+// NOTE - Checking how to have shorter time style (ex: 5:00 AM).
+// console.log(new Date(newDT * 1000).toLocaleString('en-US', {timeStyle: 'short'}));
+
+
