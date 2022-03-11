@@ -1302,6 +1302,7 @@ const evanstonWeather = {
 };
 
 
+
 // SECTION -  1. Access the city information using some kind of object notation.
 
   // REVIEW - 1a. print the name of the city in the console.
@@ -1325,6 +1326,7 @@ const evanstonWeather = {
 //     'The coordinates of ' + obj.city.name + ' are ' + obj.city.coord.lat + ' latitude and ' + obj.city.coord.lon + ' longitude.'
 //   );
 // }
+
 
 
 // SECTION - 2. Write logic to console.log the weather description for 3-20 at 6pm. Make the output a nice English sentence.
@@ -1397,6 +1399,7 @@ const evanstonWeather = {
 // printWeatherDescription(evanstonWeather, "3/20/2018, 7:00:00 PM CDT");
 
 
+
 // SECTION - 3. Write logic to print out the forecasted temperature for 3-20 at 9am. Make the output a nice English sentence, and code any conversion necessary (Temp is given in Kelvin).
 
 // function displayForecastTemp(obj, forecastTime) {
@@ -1420,6 +1423,7 @@ const evanstonWeather = {
 
 // displayForecastTemp(evanstonWeather, '3/20/2018, 7:00:00 PM CDT');
 // displayForecastTemp(evanstonWeather, '3/20/2018, 10:00:00 PM CDT');
+
 
 
 // SECTION - 4a. Write logic to find wind speed and direction on St. Patrick's day at 3pm. Do some googling to figure out how to convert meters/second to mph, and how to convert the meteorological description of wind direction into human-understandable format. Write logic to do the conversions (don't just plug 3m/s in mph into Google or some other online converter). 
@@ -1463,6 +1467,7 @@ const evanstonWeather = {
 // }
 
 // windReadings(evanstonWeather, '3/17/2018, 4:00:00 PM CDT');
+
 
 
 // SECTION - 5. Write logic to print the humidity each day at noon. If it's over 75%, also print the word "gross" in parentheses like this:
@@ -1510,6 +1515,7 @@ function checkHumidityWDateStamp(obj) {
   }
 }
 
+// NOTE - Source: https://bobbyhadz.com/blog/javascript-format-date-yyyy-mm-dd
 function padTo2Digits(num) {
   return num.toString().padStart(2, '0');
 }
@@ -1532,3 +1538,120 @@ function formatDate(date) {
 // console.log(new Date(newDT * 1000).toLocaleString('en-US', {timeStyle: 'short'}));
 
 
+
+// SECTION - 6. So, by now you've noticed that you're given the weather data for 3 hour time increments. For this question, write logic to figure out the high and low temp for each day, as well as a description of the weather overall for the day. You will create an object that stores all of it, as follows:
+
+// • the date in a human-friendly format (like "Tue, Jan 30, 1997"--research JavaScript date stuff on MDN to see how to convert)
+// • the high temp for that day (use the highest of the 8 values for a given day, don't forget to convert Kelvin to F -- again write logic to do this)\
+// • low temp (again, use the lowest of the 8 values for a given day, converted)
+// • the weather description for that day -- this will be the weather description that occurs the 'most frequently.' if multiple descriptions occur an equal number of times in a day, you can use whichever you like.
+
+const myWeather = [];
+
+// NOTE - new object created within function block can be pushed to global-scoped array.
+
+function newWeatherObject(obj) {
+  const tempObject = {
+    0: [],
+  }
+
+  for (let a = 0; a < obj.list.length; a++) {
+    let weatherLogEntry = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'full'});
+
+    if (new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'full'}).match('March 16')) {
+      tempObject[0].push(obj.list[a])
+    }
+
+    // calculate the four values for new object
+    // add key/value pairs for said four values in new object
+    // push new object into myWeather array
+    // empty / clear or delete / create new array
+  }
+  console.log(tempObject);
+}
+
+
+// function createWeatherObject(obj) {
+//   const tempObj = {};
+//   count = 0;
+
+//   for (let a = 0; a < obj.list.length; a++) {
+//     let weatherLogEntry = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', dateStyle: 'full'});
+
+// // NOTE - 'in' operator saved my mf ass:
+//     if (count === 0) {
+//       tempObj[weatherLogEntry] = [];
+//       tempObj[weatherLogEntry].push(obj.list[a])
+//       count += 1;
+//     } else if (weatherLogEntry in tempObj) {
+//       tempObj[weatherLogEntry].push(obj.list[a]);
+//     } else {
+//       tempObj[weatherLogEntry] = [];
+//       tempObj[weatherLogEntry].push(obj.list[a]);
+//     }
+
+//   }
+
+//   for (key in tempObj) {
+//     let arr1 = [];
+//     for (let b = 0; b < tempObj[key].length; b++) {
+//       arr1.push(tempObj[key][b].main.temp)
+//     }
+//     console.log(arr1);
+//   }
+
+//   console.log(tempObj);
+
+// }
+
+// let check = createWeatherObject(evanstonWeather);
+
+
+function dailyWeatherAverages(obj) {
+  const tempObject = {};
+  let count = 0;
+
+  // for loop to group log entries in evanstonWeather by date:
+  for (let a = 0; a < obj.list.length; a++) {
+    let weatherLogTime = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', dateStyle: 'full'});
+
+    if (count === 0 || weatherLogTime in tempObject == false) {
+      tempObject[weatherLogTime] = [];
+      tempObject[weatherLogTime].push(obj.list[a]);
+      count += 1;
+    } else if (weatherLogTime in tempObject) {
+      tempObject[weatherLogTime].push(obj.list[a]);
+    }
+  }
+
+  // keys!
+  for (key in tempObject) {
+    const pushObject = {};
+
+    let tempArray = [];
+    let lowArray = []
+    let descArray = [];
+    for (let b = 0; b < tempObject[key].length; b++) {
+      tempArray.push(tempObject[key][b].main.temp_max);
+      lowArray.push(tempObject[key][b].main.temp_min);
+      descArray.push(tempObject[key][b].weather[0].description);
+    }
+
+    pushObject.date = key;
+    pushObject.high = ((Math.max(...tempArray) - 273) * 1.8 + 32);
+    pushObject.low = ((Math.min(...lowArray) - 273) * 1.8 + 32);
+    pushObject.description = descArray;
+    myWeather.push(pushObject);
+  }
+  // console.log(tempObject['Friday, March 16, 2018']);
+}
+
+dailyWeatherAverages(evanstonWeather);
+console.log(myWeather);
+
+
+const population = {
+  'bow': [6000, 2999, 9776],
+  'san anselmo': 12000,
+  'brooklyn': 2000000,
+};
