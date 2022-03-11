@@ -1570,7 +1570,6 @@ function newWeatherObject(obj) {
   console.log(tempObject);
 }
 
-
 // function createWeatherObject(obj) {
 //   const tempObj = {};
 //   count = 0;
@@ -1643,7 +1642,6 @@ function dailyWeatherAverages(obj) {
     pushObject.description = mostOften(descArray);
     myWeather.push(pushObject);
   }
-  // console.log(tempObject['Friday, March 16, 2018']);
 }
 
 dailyWeatherAverages(evanstonWeather);
@@ -1656,6 +1654,8 @@ const population = {
   'brooklyn': 2000000,
 };
 
+// NOTE - source: https://javascript.plainenglish.io/how-to-find-the-most-frequent-element-in-an-array-in-javascript-c85119dc78d2
+
 function mostOften(inputArray) {
   const hashmap = inputArray.reduce((acc, val) => {
     acc[val] = (acc[val] || 0) + 1;
@@ -1663,19 +1663,3 @@ function mostOften(inputArray) {
   }, {});
   return Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b);
 }
-
-let string = 'How much wood could a woodchuck chuck if a woodchuck could chuck wood'.split(' ');
-console.log(mostOften(string));
-
-// function getMostFrequent(arr) {
-//   const hashmap = arr.reduce((acc, val) => {
-//     acc[val] = (acc[val] || 0) + 1;
-//     return acc;
-//   }, {});
-//   console.log(hashmap);
-//   // return Object.keys(hashmap).reduce((a, b) =>
-//   //   hashmap[a] > hashmap[b] ? a : b
-//   // );
-// }
-
-// getMostFrequent([0, 1, 1, 2, 3]);
