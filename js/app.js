@@ -1640,7 +1640,7 @@ function dailyWeatherAverages(obj) {
     pushObject.date = key;
     pushObject.high = ((Math.max(...tempArray) - 273) * 1.8 + 32);
     pushObject.low = ((Math.min(...lowArray) - 273) * 1.8 + 32);
-    pushObject.description = descArray;
+    pushObject.description = mostOften(descArray);
     myWeather.push(pushObject);
   }
   // console.log(tempObject['Friday, March 16, 2018']);
@@ -1655,3 +1655,27 @@ const population = {
   'san anselmo': 12000,
   'brooklyn': 2000000,
 };
+
+function mostOften(inputArray) {
+  const hashmap = inputArray.reduce((acc, val) => {
+    acc[val] = (acc[val] || 0) + 1;
+    return acc;
+  }, {});
+  return Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b);
+}
+
+let string = 'How much wood could a woodchuck chuck if a woodchuck could chuck wood'.split(' ');
+console.log(mostOften(string));
+
+// function getMostFrequent(arr) {
+//   const hashmap = arr.reduce((acc, val) => {
+//     acc[val] = (acc[val] || 0) + 1;
+//     return acc;
+//   }, {});
+//   console.log(hashmap);
+//   // return Object.keys(hashmap).reduce((a, b) =>
+//   //   hashmap[a] > hashmap[b] ? a : b
+//   // );
+// }
+
+// getMostFrequent([0, 1, 1, 2, 3]);
