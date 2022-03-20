@@ -1520,6 +1520,7 @@ function padTo2Digits(num) {
   return num.toString().padStart(2, '0');
 }
 
+// NOTE - Below, the 'getMonth()' has a +1 because it returns and integer between ("0") for January, ("11") for December.
 function formatDate(date) {
   return [
     date.getFullYear(),
@@ -1550,25 +1551,25 @@ const myWeather = [];
 
 // NOTE - new object created within function block can be pushed to global-scoped array.
 
-function newWeatherObject(obj) {
-  const tempObject = {
-    0: [],
-  }
+// function newWeatherObject(obj) {
+//   const tempObject = {
+//     0: [],
+//   }
 
-  for (let a = 0; a < obj.list.length; a++) {
-    let weatherLogEntry = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'full'});
+//   for (let a = 0; a < obj.list.length; a++) {
+//     let weatherLogEntry = new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'full'});
 
-    if (new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'full'}).match('March 16')) {
-      tempObject[0].push(obj.list[a])
-    }
+//     if (new Date(obj.list[a].dt * 1000).toLocaleString('en-US', {dateStyle: 'full'}).match('March 16')) {
+//       tempObject[0].push(obj.list[a])
+//     }
 
-    // calculate the four values for new object
-    // add key/value pairs for said four values in new object
-    // push new object into myWeather array
-    // empty / clear or delete / create new array
-  }
-  console.log(tempObject);
-}
+//     // calculate the four values for new object
+//     // add key/value pairs for said four values in new object
+//     // push new object into myWeather array
+//     // empty / clear or delete / create new array
+//   }
+//   console.log(tempObject);
+// }
 
 // function createWeatherObject(obj) {
 //   const tempObj = {};
@@ -1644,22 +1645,80 @@ function dailyWeatherAverages(obj) {
   }
 }
 
-dailyWeatherAverages(evanstonWeather);
-console.log(myWeather);
-
-
-const population = {
-  'bow': [6000, 2999, 9776],
-  'san anselmo': 12000,
-  'brooklyn': 2000000,
-};
-
 // NOTE - source: https://javascript.plainenglish.io/how-to-find-the-most-frequent-element-in-an-array-in-javascript-c85119dc78d2
 
 function mostOften(inputArray) {
   const hashmap = inputArray.reduce((acc, val) => {
     acc[val] = (acc[val] || 0) + 1;
     return acc;
+  }, {});
+  return Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b);
+}
+
+// dailyWeatherAverages(evanstonWeather);
+// console.log(myWeather);
+
+
+
+// SECTION - 7. Put all of the logic (but don't delete your question 6 answer) from the previous question into a function called getWeatherArray that again takes the entire huge evanstonWeather object in as a parameter called data, and works with that parameter (instead of with the original object) to build and return an array like the myWeather one from the previous question. Refactor the logic as necessary to use the parameter to generate the objects/array of objects.
+
+// In each object, store:
+
+// 7A. The date in a human-friendly format.
+// 7B. The high temp for that day (use the highest of the 8 values for the given day, convert from Kelvin to F).
+// 7C. The low temp for that day (use the lowest of the 8 values, converted from Kelvin to F).
+// 7D. The weather description for that day -- the one that occurs most frequently. If multiple descriptions occur an dequal number of times, choose whichever you like.
+
+function getWetherArray(data) {
+  const tempArray = [];
+  const tempObject = {};
+  let count = 0;
+
+  // NOTE - Group all logs within tempObject. Each date included in the evanstonWeather object becomes a key, with the value being an array that includes all logs that occur on that date:
+  for (let a = 0; a < data.list.length; a++) {
+    let logTime = new Date(data.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', dateStyle: 'full'});
+
+    if (count === 0 || logTime in tempObject == false) {
+      tempObject[logTime] = [data.list[a]]
+      count += 1;
+    } else {
+      tempObject[logTime].push(data.list[a]);
+    }
+  }
+
+  // With tempObject "fully stocked" with all logs, now create a new object for each key/value pair with the required four points of information that we were asked for (date, high temp, low temp, weather description):
+  for (key in tempObject) {
+    const pushObject = {
+      date: '',
+      high: [],
+      low: [],
+      description: [],
+    }
+
+    for (let b = 0; b < tempObject[key].length; b++) {
+      pushObject.high.push(tempObject[key][b].main.temp_max);
+      pushObject.low.push(tempObject[key][b].main.temp_min);
+      pushObject.description.push(tempObject[key][b].weather[0].description);
+    }
+
+    pushObject.date = key;
+    pushObject.high = kelvinToF(Math.max(...pushObject.high));
+    pushObject.low = kelvinToF(Math.min(...pushObject.low));
+    pushObject.description = mostOften(pushObject.description);
+
+    tempArray.push(pushObject);
+  }
+  return tempArray;
+}
+
+function kelvinToF(num) {
+  return (num - 273) * 1.8 + 32;
+}
+
+function mostOften(inputArray) {
+  const hashmap = inputArray.reduce((acc, val) => {
+    acc[val] = (acc[val] || 0) + 1;
+      return acc;
   }, {});
   return Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b);
 }
