@@ -1669,24 +1669,10 @@ function mostOften(inputArray) {
 // 7C. The low temp for that day (use the lowest of the 8 values, converted from Kelvin to F).
 // 7D. The weather description for that day -- the one that occurs most frequently. If multiple descriptions occur an dequal number of times, choose whichever you like.
 
-function getWetherArray(data) {
+function getWeatherArray(data) {
   const tempArray = [];
-  const tempObject = {};
-  let count = 0;
+  let tempObject = groupDates(data);
 
-  // NOTE - Group all logs within tempObject. Each date included in the evanstonWeather object becomes a key, with the value being an array that includes all logs that occur on that date:
-  for (let a = 0; a < data.list.length; a++) {
-    let logTime = new Date(data.list[a].dt * 1000).toLocaleString('en-US', {timeZone: 'America/Chicago', dateStyle: 'full'});
-
-    if (count === 0 || logTime in tempObject == false) {
-      tempObject[logTime] = [data.list[a]]
-      count += 1;
-    } else {
-      tempObject[logTime].push(data.list[a]);
-    }
-  }
-
-  // With tempObject "fully stocked" with all logs, now create a new object for each key/value pair with the required four points of information that we were asked for (date, high temp, low temp, weather description):
   for (key in tempObject) {
     const pushObject = {
       date: '',
@@ -1711,8 +1697,27 @@ function getWetherArray(data) {
   return tempArray;
 }
 
+function groupDates(data) {
+  const tempObject = {};
+  let count = 0;
+  for (let a = 0; a < data.list.length; a++) {
+    let logTime = new Date(data.list[a].dt * 1000).toLocaleString("en-US", {
+      timeZone: "America/Chicago",
+      dateStyle: "full",
+    });
+
+    if (count === 0 || logTime in tempObject == false) {
+      tempObject[logTime] = [data.list[a]];
+      count += 1;
+    } else {
+      tempObject[logTime].push(data.list[a]);
+    }
+  }
+  return tempObject;
+}
+
 function kelvinToF(num) {
-  return (num - 273) * 1.8 + 32;
+  return ((num - 273) * 1.8 + 32).toFixed(0);
 }
 
 function mostOften(inputArray) {
@@ -1721,4 +1726,20 @@ function mostOften(inputArray) {
       return acc;
   }, {});
   return Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b);
+}
+
+
+
+// SECTION - 8. Write another function printForecast that iterates over the array returned by getWeatherArray and console.logs the 5-day forecast data like this:
+
+// -------------------
+// Date: Tue, Jan 30, 1997
+// Weather: clear
+// High Temp: 13°F
+// Low Temp: 2°F
+// -------------------
+
+function printForecast(data) {
+  let objectToPrint = getWeatherArray(data);
+  console.log(objectToPrint);
 }
