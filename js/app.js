@@ -1740,6 +1740,12 @@ function mostOften(inputArray) {
 // -------------------
 
 function printForecast(data) {
-  let objectToPrint = getWeatherArray(data);
-  console.log(objectToPrint);
+  let myObject = getWeatherArray(data);
+  for (let a = 0; a < myObject.length; a++) {
+    console.log(
+      `-------------------\nDate: ${myObject[a].date}\nWeather: ${myObject[a].description}\nHigh Temp: ${myObject[a].high}°F\nLow Temp: ${myObject[a].low}°F\n-------------------`
+    );
+  }
 }
+
+printForecast(evanstonWeather)
